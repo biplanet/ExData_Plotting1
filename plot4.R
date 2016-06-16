@@ -1,0 +1,21 @@
+ds = "./household_power_consumption.txt"
+dataset= read.table(ds,header=TRUE, sep=";",dec=".")
+subset=dataset[dataset$Date %in% c("1/2/2007","2/2/2007") ,]
+dateformat = strptime(paste(subset$Date, subset$Time, sep=" "), "%d/%m/%Y %H:%M:%S") 
+globalActivePower <- as.character(subset$Global_active_power)
+globalReactivePower <- as.character(subset$Global_reactive_power)
+voltage <- as.character(subset$Voltage)
+Sub_metering_1 <- as.character(subset$Sub_metering_1)
+Sub_metering_2 <- as.character(subset$Sub_metering_2)
+Sub_metering_3 <- as.character(subset$Sub_metering_3)
+png("plot4.png", width=480, height=480)
+par(mfrow = c(2, 2)) 
+plot(dateformat,globalActivePower, type="l", xlab="", ylab = "Global Active Power")
+plot(dateformat, voltage, type="l", xlab="datetime", ylab="Voltage")
+plot(dateformat, Sub_metering_1, type="l", ylab="Energy Submetering", xlab="")
+lines(dateformat, Sub_metering_2, type="l", col="red")
+lines(dateformat, Sub_metering_3, type="l", col="blue")
+legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty=, lwd=2.5, col=c("black", "red", "blue"), bty="o")
+plot(dateformat, globalReactivePower, type="l", xlab="datetime", ylab="Global_reactive_power")
+
+dev.off()
